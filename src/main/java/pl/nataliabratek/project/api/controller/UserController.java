@@ -15,6 +15,8 @@ import pl.nataliabratek.project.domain.service.TokenService;
 import pl.nataliabratek.project.domain.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
+
 @AllArgsConstructor
 @RestController
 public class UserController {
@@ -38,16 +40,20 @@ public class UserController {
                 .body(userDtos);
     }
     @GetMapping("/api/v1/users/{id}")
-    public ResponseEntity<List<UserDto>> getUserById(
+    public ResponseEntity<UserDto> getUserById(
             @RequestParam(value="filter-by-name", required = false) String filter,
             @RequestHeader(value="X-Auth-Login") String login,
             @PathVariable(value = "id") Integer id) {
         System.out.println(id);
-        UserDto userDto = new UserDto("Jan", "Nowak", 1);
-        UserDto userDto2 = new UserDto("Adam", "Nowak2", 2);
-        List<UserDto> userDtos = List.of(userDto2, userDto);
+        //UserDto userDto = new UserDto("Jan", "Nowak", 1);
+        //UserDto userDto2 = new UserDto("Adam", "Nowak2", 2);
+        //List<UserDto> userDtos = List.of(userDto2, userDto);
+        Optional<UserDto> userDtoOptional = userService.getUserById(id);
+        if (userDtoOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userDtos);
+                .body(userDtoOptional.get());
     }
     //rest api, request body
 
@@ -60,7 +66,8 @@ public class UserController {
     @DeleteMapping("/api/v1/users/{id}")
     public ResponseEntity<Void> deleteUser(
         @PathVariable(value = "id") Integer id){
-        System.out.println("usuwanie uzytkownika");
+        //System.out.println("usuwanie uzytkownika");
+        userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @PutMapping("/api/v1/users/{id}")
