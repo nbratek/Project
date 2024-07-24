@@ -59,7 +59,7 @@ public class UserController {
 
     @PostMapping ("/api/v1/users")
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserDto body) {
-        UserDto userDto = userService.createUser(body.getName(), body.getLastName());
+        UserDto userDto = userService.createUser(body.getName(), body.getLastName(), body.getPassword(), body.getEmail());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userDto);
     }
@@ -74,10 +74,8 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @PathVariable(value = "id") Integer id,
             @RequestBody UpdateUserDto body){
-        System.out.println("update uzytkownika");
-
-        return ResponseEntity.status(HttpStatus.OK).body(new UserDto(body.getName(), body.getLastName(), 3));
+        //System.out.println("update uzytkownika");
+        UserDto userDto = userService.updateUser(id, body);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 }
-//usunac uzykownika z bazy o okreslonym id, getuserbyid
-//github

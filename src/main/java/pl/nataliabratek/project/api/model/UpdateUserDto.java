@@ -10,5 +10,5 @@ import lombok.Setter;
 public class UpdateUserDto {
     private String name;
     private String lastName;
-
+    //TODO obsluzyc endpoint update
 }
