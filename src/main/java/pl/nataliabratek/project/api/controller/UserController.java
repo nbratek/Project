@@ -78,4 +78,12 @@ public class UserController {
         UserDto userDto = userService.updateUser(id, body);
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
+
+    @PutMapping("/api/v1/users/confirm/{confirmationToken}")
+    public ResponseEntity<Void> confirmUser(
+            @PathVariable(value = "confirmationToken" ) String token
+    ){
+        userService.confirmUserByToken(token);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

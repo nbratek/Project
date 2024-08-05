@@ -15,6 +15,7 @@ import pl.nataliabratek.project.domain.exception.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public UserDto createUser(String name, String lastName, String password, String email) {
-        String token = "kfkvnfkn";
+        String token = UUID.randomUUID().toString();
         String hashedPassword = hashPassword(password);
         UserEntity userEntity = new UserEntity(null, name, lastName, hashedPassword, email, token);
         userRepository.save(userEntity);
@@ -35,7 +36,6 @@ public class UserService {
     }
 
     private String hashPassword(String password) {
-        //TODO wykorzystac spring security i zahashowac haslo
         return passwordEncoder.encode(password);
     }
 
@@ -76,4 +76,10 @@ public class UserService {
 
     }
 
+    public void confirmUserByToken(String confirmationToken) {
+        UserEntity userEntity = userRepository.findByUnconfirmedToken(confirmationToken)
+                .orElseThrow(NotFoundException::new);
+        userEntity.setUnconfirmedToken(null);
+        userRepository.save(userEntity);
+    }
 }
