@@ -12,4 +12,6 @@ public class ErrorHandler {
     public ResponseEntity<String> handleNotFound(NotFoundException exception) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
 }

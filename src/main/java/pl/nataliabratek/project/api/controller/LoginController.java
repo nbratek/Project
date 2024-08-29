@@ -3,17 +3,16 @@ package pl.nataliabratek.project.api.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.nataliabratek.project.api.model.LoginDto;
-import pl.nataliabratek.project.domain.usecase.AuthorizeUserUseCase;
+import pl.nataliabratek.project.domain.service.AuthorizationService;
 
 @RestController
 @RequestMapping("/api/v1")
 public class LoginController {
 
-    private AuthorizeUserUseCase authorizeUserUseCase;
+    private AuthorizationService authorizationService;
 
-    public LoginController(AuthorizeUserUseCase authorizeUserUseCase) {
-        this.authorizeUserUseCase = authorizeUserUseCase;
+    public LoginController(AuthorizationService authorizeUserUseCase) {
+        this.authorizationService = authorizeUserUseCase;
     }
 
     @PostMapping("/login")
@@ -21,7 +20,7 @@ public class LoginController {
         @RequestHeader("X-Auth-Login") String login,
         @RequestHeader("X-Auth-Password") String password
         ){
-        String token = authorizeUserUseCase.authorize(login, password);
+        String token = authorizationService.authorize(login, password);
         if (token == null) {
             // zwraca komunikat o niepoprawnych danych
             return ResponseEntity.status(401).body("Niepoprawne dane");
@@ -32,6 +31,6 @@ public class LoginController {
                     .body(token);
         }
     }
-
+// wyjatki
 }
 

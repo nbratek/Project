@@ -25,12 +25,14 @@ public class UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;
     private BCryptPasswordEncoder passwordEncoder;
+    //private EmailService emailService;
 
     public UserDto createUser(String name, String lastName, String password, String email) {
         String token = UUID.randomUUID().toString();
         String hashedPassword = hashPassword(password);
         UserEntity userEntity = new UserEntity(null, name, lastName, hashedPassword, email, token);
         userRepository.save(userEntity);
+        //emailService.sendConfirmationEmail(email, token);
         UserDto userDto = userMapper.mapToUserDto(userEntity);
         return userDto;
     }
