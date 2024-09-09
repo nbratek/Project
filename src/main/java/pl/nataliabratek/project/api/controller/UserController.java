@@ -21,19 +21,13 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    private TokenService tokenService;
     private UserService userService;
 
 
     @GetMapping("/api/v1/users")
     public ResponseEntity<List<UserDto>> getUsers(
-            @RequestParam(value="filter-by-name", required = false) String filter,
-            @RequestHeader(value="Authorization") String token) throws Exception {
-        System.out.println(token);
+            @RequestParam(value="filter-by-name", required = false) String filter) {
 
-        if (!tokenService.checkToken(token)){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         //System.out.println(tokenService.getUserId(token));
         List<UserDto> userDtos = userService.getUsers();
         return ResponseEntity.status(HttpStatus.OK)
@@ -42,7 +36,6 @@ public class UserController {
     @GetMapping("/api/v1/users/{id}")
     public ResponseEntity<UserDto> getUserById(
             @RequestParam(value="filter-by-name", required = false) String filter,
-            @RequestHeader(value="X-Auth-Login") String login,
             @PathVariable(value = "id") Integer id) {
         System.out.println(id);
         //UserDto userDto = new UserDto("Jan", "Nowak", 1);

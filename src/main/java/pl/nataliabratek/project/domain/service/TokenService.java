@@ -25,7 +25,10 @@ public class TokenService {
         return jwt;
     }
 
-    public boolean checkToken(String token) throws Exception {
+    public boolean checkToken(@Nullable String token)  {
+        if(token == null){
+            return false;
+        }
         String normalizedToken = token.replace("Bearer ", "");
         JwtParser jwtParser = Jwts.parser()
                 .verifyWith(KEY)
