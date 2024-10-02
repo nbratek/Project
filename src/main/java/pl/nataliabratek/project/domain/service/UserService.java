@@ -2,13 +2,11 @@ package pl.nataliabratek.project.domain.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.nataliabratek.project.api.mapper.UserMapper;
-import pl.nataliabratek.project.api.model.UpdateUserDto;
-import pl.nataliabratek.project.api.model.UserDto;
+import pl.nataliabratek.project.api.model.request.UpdateUserDto;
+import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.data.users.UserEntity;
 import pl.nataliabratek.project.data.users.UserRepository;
 import pl.nataliabratek.project.domain.exception.NotFoundException;

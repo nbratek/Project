@@ -1,4 +1,4 @@
-package pl.nataliabratek.project.api.model;
+package pl.nataliabratek.project.api.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

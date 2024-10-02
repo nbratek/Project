@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import pl.nataliabratek.project.domain.service.TokenService;
 
@@ -14,7 +12,7 @@ import java.io.IOException;
 @AllArgsConstructor
 @Component
 @Order(1)
-public class TransactionFilter implements Filter {
+public class AuthorizationFilter implements Filter {
     private TokenService tokenService;
     @Override
     public void doFilter(

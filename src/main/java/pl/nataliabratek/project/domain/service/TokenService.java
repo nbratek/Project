@@ -54,3 +54,85 @@ public class TokenService {
         }
     }
 }
+
+//zaprojektowac api - endpoint do dodawania, pobierania ogloszen
+
+/*
+
+dodawanie ogloszen - POST
+@PostMapping ("/api/v1/properties")
+- RequestBody:
+{
+  "title": "",
+  "price": 0.0,
+  "description" : ""
+}
+
+- ResponseBody
+{
+  "id": 0,
+  "title": "",
+  "price": 0.0,
+  "description" : ""
+  "createdAt" : "" (yyyy-mm-dd hh:mm:ss)
+}
+ResponseCode - 201 Created
+
+pobieranie listy ogloszen - GET
+@GetMapping("/api/v1/properties")
+RequestParameters:
+- filterByUserId(optional, Integer),
+- pageNumber(optional)
+- pageSize(optional)
+
+ResponseBody:
+{
+  "properties" : [
+    {
+      "id": 0,
+      "title": "",
+      "price": 0.0,
+      "description" : ""
+      "createdAt" : "" (yyyy-mm-dd hh:mm:ss)
+    }
+  ],
+  "totalCount" : 500
+
+}
+
+ResponseCode - 200 ok
+
+pobieranie ogloszenia -GET
+@GetMapping("/api/v1/properties/{id}")
+- ResponseBody:
+    {
+      "id": 0,
+      "title": "",
+      "price": 0.0,
+      "description" : ""
+      "createdAt" : "" (yyyy-mm-dd hh:mm:ss)
+    }
+ResponseCode - 200 ok
+aktualizacja ogłoszenia - PUT
+@PutMapping("/api/v1/properties/{id}")
+-RequestBody:
+    {
+        "title": "",
+        "price": 0.0,
+        "description" : ""
+    }
+
+- ResponseBody:
+    {
+      "id": 0,
+      "title": "",
+      "price": 0.0,
+      "description" : ""
+      "createdAt" : "" (yyyy-mm-dd hh:mm:ss)
+    }
+ResponseCode - 200 ok
+usuwanie ogloszenia - DELETE
+@DeleteMapping("/api/v1/properties/{id}")
+
+ResponseCode - 204 NoContent
+*/

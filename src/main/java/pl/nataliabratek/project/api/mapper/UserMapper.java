@@ -1,7 +1,7 @@
 package pl.nataliabratek.project.api.mapper;
 
 import org.springframework.stereotype.Service;
-import pl.nataliabratek.project.api.model.UserDto;
+import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.data.users.UserEntity;
 
 @Service

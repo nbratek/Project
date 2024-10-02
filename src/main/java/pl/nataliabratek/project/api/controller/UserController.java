@@ -1,16 +1,12 @@
 package pl.nataliabratek.project.api.controller;
 
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.nataliabratek.project.api.model.CreateUserDto;
-import pl.nataliabratek.project.api.model.UpdateUserDto;
-import pl.nataliabratek.project.api.model.UserDto;
-import pl.nataliabratek.project.data.users.UserEntity;
-import pl.nataliabratek.project.data.users.UserRepository;
+import pl.nataliabratek.project.api.model.request.CreateUserDto;
+import pl.nataliabratek.project.api.model.request.UpdateUserDto;
+import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.domain.service.TokenService;
 import pl.nataliabratek.project.domain.service.UserService;
 
@@ -22,13 +18,15 @@ import java.util.Optional;
 public class UserController {
 
     private UserService userService;
+    private TokenService tokenService;
 
 
     @GetMapping("/api/v1/users")
     public ResponseEntity<List<UserDto>> getUsers(
-            @RequestParam(value="filter-by-name", required = false) String filter) {
+            @RequestParam(value="filter-by-name", required = false) String filter,
+            @RequestHeader(name="Authorization") String token) {
 
-        //System.out.println(tokenService.getUserId(token));
+        System.out.println(tokenService.getUserId(token));
         List<UserDto> userDtos = userService.getUsers();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userDtos);
