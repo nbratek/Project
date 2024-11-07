@@ -12,7 +12,9 @@ import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.api.model.response.PropertyDto;
 import pl.nataliabratek.project.api.utils.ParameterUtils;
 import pl.nataliabratek.project.domain.service.PropertyService;
+import pl.nataliabratek.project.domain.service.TokenService;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -20,10 +22,14 @@ import java.util.Optional;
 @RequestMapping("/api/v1/properties")
 public class PropertyController {
     private PropertyService propertyService;
+    private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<PropertyDto> createProperty(@RequestBody CreateOrUpdatePropertyDto body) {
-        PropertyDto dto = propertyService.createProperty(body.getTitle(), body.getPrice(), body.getDescription())
+    public ResponseEntity<PropertyDto> createProperty(@RequestBody CreateOrUpdatePropertyDto body,
+                                                      @RequestHeader(name="Authorization") String token) {
+        Integer userId = tokenService.getUserId(token);
+        Objects.requireNonNull(userId);
+        PropertyDto dto = propertyService.createProperty(userId, body.getTitle(), body.getPrice(), body.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(dto);
     }
@@ -43,10 +49,10 @@ public class PropertyController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<PropertyCollectionDto> getPropertyById(
+    public ResponseEntity<PropertyDto> getPropertyById(
             @PathVariable(value = "id") Integer id) {
         PropertyDto dto = propertyService.getPropertyById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(dto.get());
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 
@@ -64,6 +70,8 @@ public class PropertyController {
         propertyService.deleteProperty(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
 //jak zapisac do bazy obiekt
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.nataliabratek.project.api.mapper.UserMapper;
+import pl.nataliabratek.project.api.mapper.UserDtoMapper;
 import pl.nataliabratek.project.api.model.request.UpdateUserDto;
 import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.data.users.UserEntity;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Getter
 public class UserService {
     private UserRepository userRepository;
-    private UserMapper userMapper;
+    private UserDtoMapper userMapper;
     private BCryptPasswordEncoder passwordEncoder;
     private EmailService emailService;
 

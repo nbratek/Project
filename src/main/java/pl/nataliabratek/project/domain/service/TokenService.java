@@ -135,4 +135,14 @@ usuwanie ogloszenia - DELETE
 @DeleteMapping("/api/v1/properties/{id}")
 
 ResponseCode - 204 NoContent
+
 */
+
+/*
+
+PropertyList
+-dodanie ogloszenia do listy ulubionych
+-usuniecie ogloszenia z listy ulubionych
+-pobranie ogloszen ulubionych po id ogloszen
+
+ */
