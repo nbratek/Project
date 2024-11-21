@@ -8,14 +8,19 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import pl.nataliabratek.project.api.model.request.CreateOrUpdatePropertyDto;
 import pl.nataliabratek.project.api.model.response.PropertyCollectionDto;
+import pl.nataliabratek.project.api.model.response.PropertyFavoritesIdsCollectionDto;
 import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.api.model.response.PropertyDto;
 import pl.nataliabratek.project.api.utils.ParameterUtils;
 import pl.nataliabratek.project.domain.service.PropertyService;
 import pl.nataliabratek.project.domain.service.TokenService;
 
+import java.lang.reflect.Array;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -72,7 +77,53 @@ public class PropertyController {
     }
 
 
+    @PutMapping("/{propertyId}/favorites")
+    public ResponseEntity<Void> addToFavorites(
+            @PathVariable(value = "propertyId") Integer propertyId,
+            @RequestHeader(name="Authorization") String token
+    ){
+        Integer userId = tokenService.getUserId(token);
+        Objects.requireNonNull(userId);
+        propertyService.addToFavorites(userId, propertyId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
-//jak zapisac do bazy obiekt
+    @DeleteMapping("/{propertyId}/favorites")
+    public ResponseEntity<Void> deleteFromFavorites(
+            @PathVariable(value = "propertyId") Integer propertyId,
+            @RequestHeader(name="Authorization") String token) {
+        Integer userId = tokenService.getUserId(token);
+        Objects.requireNonNull(userId);
+        propertyService.deleteFromFavorites(userId, propertyId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @GetMapping("/favourites")
+    public ResponseEntity<PropertyFavoritesIdsCollectionDto> getFavoritePropertyIds(
+            @RequestHeader(name = "Authorization") String token,
+            @RequestParam(value = "filterByPropertyId", required = false) @Nullable Set<String> propertyIdsStrings) {
+        Integer userId = tokenService.getUserId(token);
+        Objects.requireNonNull(userId);
+
+
+        Set<Integer> filterByPropertyIds = propertyIdsStrings.stream()
+                .map(s -> ParameterUtils.convertToInteger(s))
+                .filter(intOpt -> intOpt.isPresent())
+                .map(intOpt -> intOpt.get())
+                .collect(Collectors.toSet());
+
+
+//        Set<Integer> propertyIds2 = new HashSet<>();
+//        for (String s : propertyIdsStrings){
+//            Optional<Integer> intOpt = ParameterUtils.convertToInteger(s);
+//            if (intOpt.isPresent()){
+//                propertyIds2.add(intOpt.get());
+//            }
+//        }
+        Set<Integer> favoritePropertyIds = propertyService.getFavoritePropertyIds(userId, filterByPropertyIds);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new PropertyFavoritesIdsCollectionDto(favoritePropertyIds));
+    }
 }
 

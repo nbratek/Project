@@ -140,9 +140,122 @@ ResponseCode - 204 NoContent
 
 /*
 
+
+
+
 PropertyList
 -dodanie ogloszenia do listy ulubionych
+
+@PutMapping("/api/v1/properties/{propertyId}/favorites")
+
+ResponseCode - 200 ok
+
+
 -usuniecie ogloszenia z listy ulubionych
+
+@DeleteMapping("/api/v1/properties/{propertyId}/favorites")
+
+ResponseCode - 204 NoContent
+
+
 -pobranie ogloszen ulubionych po id ogloszen
+@GetMapping("/api/v1/properties/favourites")
+RequestParameters:
+- filterByPropertyId(optional, Integer, Array),
+
+
+- ResponseBody:
+    {
+  "favoritesPropertyIds": [
+    1, 2
+    ]
+}
+ResponseCode - 200 ok
+
+
+
+[
+    1, 2
+    ]
+
+
+
+
+-dodawanie komentarzy
+@PostMapping ("/api/v1/properties/comment")
+- RequestBody:
+{
+  "propertyId": 0,
+  "message": ""
+}
+
+- ResponseBody
+{
+    "propertyId": 0,
+    "message": "",
+    "createdAt": "(yyyy-mm-dd hh:mm:ss)"
+
+}
+ResponseCode - 201 Created
+
+-pobieranie komentarzy
+@GetMapping("/api/v1/properties/comment")
+RequestParameters:
+- filterByPropertyId(optional, Integer, Array),
+- paginacja
+
+ResponseBody:
+{
+    "comments": [
+        {
+        "userId": 0,
+        "userFirstName": "",
+        "userLastName": "",
+        "propertyId": 0,
+        "message": "",
+        "createdAt": "(yyyy-mm-dd hh:mm:ss)"
+        }
+        ],
+
+    "totalCounts": 0
+}
+
+
+-powiadomienie o nowych ogloszeniach
+@PostMapping ("/api/v1/properties/notification")
+- RequestBody:
+{
+   "location": "",
+   "propertyType": ""
+}
+
+- ResponseBody
+{
+   "notificatonId": 0,
+   "location": "",
+   "propertyType": ""
+}
+ResponseCode - 201 Created
+
+-zglaszanie ogloszen
+@PostMapping ("/api/v1/properties/report")
+- RequestBody:
+{
+  "propertyId": 0,
+  "reason": ""
+}
+
+- ResponseBody
+{
+   "propertyId": 0,
+   "reason": "",
+   "reportedAt": "(yyyy-mm-dd hh:mm:ss)"
+}
+
+
+
+tabela: property_favorites
+id | propertyId | userId
 
  */
+

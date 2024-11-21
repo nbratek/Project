@@ -10,14 +10,18 @@ import pl.nataliabratek.project.api.mapper.PropertyDtoMapper;
 import pl.nataliabratek.project.api.model.request.CreateOrUpdatePropertyDto;
 import pl.nataliabratek.project.api.model.response.PropertyCollectionDto;
 import pl.nataliabratek.project.api.model.response.PropertyDto;
+import pl.nataliabratek.project.data.favorites.PropertyFavoritesRepository;
+import pl.nataliabratek.project.data.favorites.PropertyFavoritesEntity;
 import pl.nataliabratek.project.data.properties.PropertyEntity;
 import pl.nataliabratek.project.data.properties.PropertyRepository;
 import pl.nataliabratek.project.data.users.UserEntity;
+import pl.nataliabratek.project.data.users.UserRepository;
 import pl.nataliabratek.project.domain.exception.NotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -25,6 +29,8 @@ import java.util.stream.Collectors;
 public class PropertyService {
     private PropertyRepository propertyRepository;
     private PropertyDtoMapper propertyDtoMapper;
+    private UserRepository userRepository;
+    private PropertyFavoritesRepository favoritesRepository;
 
     public PropertyDto createProperty(Integer userId, String title, BigDecimal price, String description) {
         PropertyEntity propertyEntity = new PropertyEntity(null, title, userId, price, description, LocalDateTime.now());
@@ -39,24 +45,21 @@ public class PropertyService {
                 .by(PropertyEntity::getId)
                 .ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        List<PropertyDto> propertyDtos;
+        List<PropertyEntity> propertyEntities;
         int totalCount;
         if (userId == null) {
-            propertyDtos = propertyRepository.findAllByFilters(pageable)
-                    .stream()
-                    .map(propertyEntity -> propertyDtoMapper.mapToPropertyDto(propertyEntity))
-                    .collect(Collectors.toList());
+            propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
             totalCount = (int) propertyRepository.count();
         } else{
-            propertyDtos = propertyRepository.findAllByUserId(userId, pageable)
-                    .stream()
-                    .map(propertyEntity -> propertyDtoMapper.mapToPropertyDto(propertyEntity))
-                    .collect(Collectors.toList());
+            propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
             totalCount = propertyRepository.countByUserId(userId);
 
         }
-        PropertyCollectionDto dto = new PropertyCollectionDto(propertyDtos, totalCount);
-        return dto;
+        List<PropertyDto> propertyDtos = propertyEntities.stream()
+                .map(propertyEntity -> propertyDtoMapper.mapToPropertyDto( propertyEntity))
+                .collect(Collectors.toList());
+        return new PropertyCollectionDto(propertyDtos, totalCount);
+
     }
     //uproscic, query
 
@@ -83,6 +86,27 @@ public class PropertyService {
                 .orElseThrow(NotFoundException::new);
 
         propertyRepository.deleteById(id);
+    }
+
+    public void addToFavorites(Integer userId, Integer propertyId){
+        UserEntity userEntity = userRepository.findById(userId) //zamienic findById na exist
+                .orElseThrow(NotFoundException::new);
+        PropertyEntity propertyEntity = propertyRepository.findById(propertyId)
+                .orElseThrow(NotFoundException::new);
+        PropertyFavoritesEntity favorites = new PropertyFavoritesEntity(null, propertyId, userId);
+        favoritesRepository.save(favorites);
+    }
+
+    public void deleteFromFavorites(Integer userId, Integer propertyId) {
+        PropertyFavoritesEntity favorite = favoritesRepository
+                .findByUserIdAndPropertyId(userId, propertyId)
+                .orElseThrow(NotFoundException::new);
+        favoritesRepository.deleteById(favorite.getId());
+    }
+
+    public Set<Integer> getFavoritePropertyIds(Integer userId, Set<Integer> filterByPropertyIds){
+        Set<Integer> favoritesPropertyIds = favoritesRepository.findAllPropertyIdsByUserIdAndPropertyIdIn(userId, filterByPropertyIds);
+        return favoritesPropertyIds;
     }
 
 }
