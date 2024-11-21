@@ -11,9 +11,10 @@ import java.util.Optional;
 
 public interface PropertyRepository extends JpaRepository<PropertyEntity, Integer> {
     Optional<PropertyEntity> findById(Integer id);
-    @Query("select p from PropertyEntity p")
-    List<PropertyEntity> findAllByFilters(Pageable pageable);
+    //@Query("select p from PropertyEntity p")
+    //List<PropertyEntity> findAllByFilters(Pageable pageable);
 
+    @Query("select p from PropertyEntity p where (:userId is null or p.userId = :userId)")
     List<PropertyEntity> findAllByUserId(Integer userId, Pageable pageable);
 
     int countByUserId(int userId);
