@@ -191,6 +191,9 @@ ResponseCode - 200 ok
 
 - ResponseBody
 {
+    "userId": 0,
+    "userFirstName": "",
+    "userLastName": "",
     "propertyId": 0,
     "message": "",
     "createdAt": "(yyyy-mm-dd hh:mm:ss)"
@@ -252,6 +255,55 @@ ResponseCode - 201 Created
    "reportedAt": "(yyyy-mm-dd hh:mm:ss)"
 }
 
+
+
+- usuwanie notyfikacji
+@DeleteMapping("/api/v1/properties/notification/{notificationId}")
+
+ResponseCode - 204 NoContent
+
+
+- pobieranie notyfikacji
+@GetMapping("/api/v1/properties/notification")
+RequestParameters:
+- paginacja
+
+
+- ResponseBody:
+    {
+    "notifications": [
+        {
+            "notificationId": 0,
+            "location": "",
+            "propertyType": ""
+        }
+    ],
+    "totalCount": 0
+}
+ResponseCode - 200 ok
+
+
+pobieranie zgloszen (dla administratora)
+@GetMapping("/api/v1/properties/reports")
+RequestParameters:
+- filterByPropertyId
+- paginacja
+
+
+- ResponseBody:
+    {
+    "reports": [
+        {
+            "propertyId": 0,
+            "reason": "",
+            "reportedAt": "(yyyy-mm-dd hh:mm:ss)",
+            "reportedByUserId": 0,
+            "reportedByUserEmail": ""
+        }
+    ],
+    "totalCounts": 0
+}
+ResponseCode - 200 ok
 
 
 tabela: property_favorites

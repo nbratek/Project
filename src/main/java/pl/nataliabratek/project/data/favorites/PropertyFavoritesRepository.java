@@ -11,4 +11,6 @@ public interface PropertyFavoritesRepository extends JpaRepository<PropertyFavor
 
     @Query("select p.propertyId from PropertyFavoritesEntity p where p.userId = :userId and p.propertyId in :propertyIds")
     Set<Integer> findAllPropertyIdsByUserIdAndPropertyIdIn(Integer userId, Set<Integer> propertyIds);
+
+    boolean existsByUserIdAndPropertyId(Integer userId, Integer propertyId);
 }

@@ -45,13 +45,13 @@ public class PropertyService {
                 .by(PropertyEntity::getId)
                 .ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        List<PropertyEntity> propertyEntities;
+        List<PropertyEntity> propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
         int totalCount;
         if (userId == null) {
-            propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
+            //propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
             totalCount = (int) propertyRepository.count();
         } else{
-            propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
+            //propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
             totalCount = propertyRepository.countByUserId(userId);
 
         }
@@ -89,10 +89,20 @@ public class PropertyService {
     }
 
     public void addToFavorites(Integer userId, Integer propertyId){
-        UserEntity userEntity = userRepository.findById(userId) //zamienic findById na exist
-                .orElseThrow(NotFoundException::new);
-        PropertyEntity propertyEntity = propertyRepository.findById(propertyId)
-                .orElseThrow(NotFoundException::new);
+//        UserEntity userEntity = userRepository.findById(userId) //zamienic findById na exist
+//                .orElseThrow(NotFoundException::new);
+//        PropertyEntity propertyEntity = propertyRepository.findById(propertyId)
+//                .orElseThrow(NotFoundException::new);
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException();
+        }
+        if (!propertyRepository.existsById(propertyId)) {
+            throw new NotFoundException();
+        }
+        boolean alreadyLiked = favoritesRepository.existsByUserIdAndPropertyId(userId, propertyId);
+        if (alreadyLiked) {
+            return;
+        }
         PropertyFavoritesEntity favorites = new PropertyFavoritesEntity(null, propertyId, userId);
         favoritesRepository.save(favorites);
     }
@@ -108,5 +118,7 @@ public class PropertyService {
         Set<Integer> favoritesPropertyIds = favoritesRepository.findAllPropertyIdsByUserIdAndPropertyIdIn(userId, filterByPropertyIds);
         return favoritesPropertyIds;
     }
+
+
 
 }
