@@ -9,6 +9,7 @@ import pl.nataliabratek.project.api.model.request.AddPropertyComment;
 import pl.nataliabratek.project.api.model.response.PropertyCollectionDto;
 import pl.nataliabratek.project.api.model.response.PropertyCommentCollectionDto;
 import pl.nataliabratek.project.api.model.response.PropertyCommentDto;
+import pl.nataliabratek.project.api.utils.ParameterUtils;
 import pl.nataliabratek.project.domain.service.PropertyCommentService;
 import pl.nataliabratek.project.domain.service.TokenService;
 
@@ -44,6 +45,10 @@ public class PropertyCommentController {
             @RequestParam(value = "pageNumber", required = false) @Nullable String pageNumber,
             @RequestParam(value = "pageSize", required = false) @Nullable String pageSize) {
 
-        PropertyCollectionDto propertyCollectionDto = propertyCommentService.getComments(propertyIds, pageNumber, pageSize);
+        Set<Integer> propertyIdsInteger = ParameterUtils.convertToSetInteger(propertyIds);
+        Integer pageNumberInt = ParameterUtils.convertToInteger(pageNumber).orElse(0);
+        Integer pageSizeInt = ParameterUtils.convertToInteger(pageSize).orElse(50);
+        PropertyCommentCollectionDto propertyCollectionDto = propertyCommentService.getComments(propertyIdsInteger, pageNumberInt, pageSizeInt);
+        return ResponseEntity.status(HttpStatus.OK).body(propertyCollectionDto);
     }
 }

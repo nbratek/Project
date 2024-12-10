@@ -46,22 +46,13 @@ public class PropertyService {
                 .ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<PropertyEntity> propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
-        int totalCount;
-        if (userId == null) {
-            //propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
-            totalCount = (int) propertyRepository.count();
-        } else{
-            //propertyEntities = propertyRepository.findAllByUserId(userId, pageable);
-            totalCount = propertyRepository.countByUserId(userId);
-
-        }
+        int totalCount = propertyRepository.countByUserId(userId);
         List<PropertyDto> propertyDtos = propertyEntities.stream()
                 .map(propertyEntity -> propertyDtoMapper.mapToPropertyDto( propertyEntity))
                 .collect(Collectors.toList());
         return new PropertyCollectionDto(propertyDtos, totalCount);
 
     }
-    //uproscic, query
 
     public PropertyDto getPropertyById(Integer id) {
         return propertyRepository.findById(id)
