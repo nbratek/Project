@@ -222,7 +222,7 @@ ResponseBody:
 
     "totalCounts": 0
 }
-
+----------------
 
 -powiadomienie o nowych ogloszeniach
 @PostMapping ("/api/v1/properties/notification")
@@ -240,24 +240,10 @@ ResponseBody:
 }
 ResponseCode - 201 Created
 
--zglaszanie ogloszen
-@PostMapping ("/api/v1/properties/report")
-- RequestBody:
-{
-  "propertyId": 0,
-  "reason": ""
-}
-
-- ResponseBody
-{
-   "propertyId": 0,
-   "reason": "",
-   "reportedAt": "(yyyy-mm-dd hh:mm:ss)"
-}
 
 
 
-- usuwanie notyfikacji
+- usuwanie subskrypcji notyfikacji
 @DeleteMapping("/api/v1/properties/notification/{notificationId}")
 
 ResponseCode - 204 NoContent
@@ -283,6 +269,22 @@ RequestParameters:
 ResponseCode - 200 ok
 
 
+-zglaszanie ogloszen
+@PostMapping ("/api/v1/properties/report")
+- RequestBody:
+{
+  "propertyId": 0,
+  "reason": ""
+}
+
+- ResponseBody
+{
+   "propertyId": 0,
+   "reason": "",
+   "reportedAt": "(yyyy-mm-dd hh:mm:ss)"
+}
+
+
 pobieranie zgloszen (dla administratora)
 @GetMapping("/api/v1/properties/reports")
 RequestParameters:
@@ -306,8 +308,6 @@ RequestParameters:
 ResponseCode - 200 ok
 
 
-tabela: property_favorites
-id | propertyId | userId
 
  */
 

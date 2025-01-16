@@ -12,6 +12,7 @@ import pl.nataliabratek.project.api.model.response.PropertyFavoritesIdsCollectio
 import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.api.model.response.PropertyDto;
 import pl.nataliabratek.project.api.utils.ParameterUtils;
+import pl.nataliabratek.project.domain.model.PropertyType;
 import pl.nataliabratek.project.domain.service.PropertyService;
 import pl.nataliabratek.project.domain.service.TokenService;
 
@@ -34,7 +35,7 @@ public class PropertyController {
                                                       @RequestHeader(name="Authorization") String token) {
         Integer userId = tokenService.getUserId(token);
         Objects.requireNonNull(userId);
-        PropertyDto dto = propertyService.createProperty(userId, body.getTitle(), body.getPrice(), body.getDescription());
+        PropertyDto dto = propertyService.createProperty(userId, body.getTitle(), body.getPrice(), body.getDescription(), body.getLocation(), body.getType());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(dto);
     }

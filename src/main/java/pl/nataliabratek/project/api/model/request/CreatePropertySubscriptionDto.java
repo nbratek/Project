@@ -5,16 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.nataliabratek.project.domain.model.PropertyType;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreateOrUpdatePropertyDto {
-    private String title;
-    private BigDecimal price;
-    private String description;
+public class CreatePropertySubscriptionDto {
     private String location;
-    private PropertyType type;
+    private PropertyType propertyType;
 
 }

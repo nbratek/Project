@@ -7,6 +7,7 @@ import pl.nataliabratek.project.api.model.response.UserDto;
 import pl.nataliabratek.project.api.utils.DateUtils;
 import pl.nataliabratek.project.data.properties.PropertyEntity;
 import pl.nataliabratek.project.data.users.UserEntity;
+import pl.nataliabratek.project.domain.model.PropertyType;
 
 @Service
 public class PropertyDtoMapper {
@@ -15,6 +16,8 @@ public class PropertyDtoMapper {
                 propertyEntity.getTitle(),
                 propertyEntity.getPrice(),
                 propertyEntity.getDescription(),
-                DateUtils.format(propertyEntity.getCreatedAt()));
+                DateUtils.format(propertyEntity.getCreatedAt()),
+                propertyEntity.getLocation(),
+                PropertyType.valueOf(propertyEntity.getType()));
     }
 }

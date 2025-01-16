@@ -3,6 +3,7 @@ package pl.nataliabratek.project.api.model.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import pl.nataliabratek.project.domain.model.PropertyType;
 
 import java.math.BigDecimal;
 
@@ -15,5 +16,7 @@ public class PropertyDto {
     private BigDecimal price;
     private String description;
     private String createdAt;
+    private String location;
+    private PropertyType type;
 
 }

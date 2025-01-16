@@ -31,6 +31,10 @@ public class PropertyEntity {
     private String description;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "location")
+    private String location;
+    @Column(name = "type")
+    private String type;
 
 
 }

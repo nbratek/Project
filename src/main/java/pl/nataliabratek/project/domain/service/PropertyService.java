@@ -17,6 +17,7 @@ import pl.nataliabratek.project.data.properties.PropertyRepository;
 import pl.nataliabratek.project.data.users.UserEntity;
 import pl.nataliabratek.project.data.users.UserRepository;
 import pl.nataliabratek.project.domain.exception.NotFoundException;
+import pl.nataliabratek.project.domain.model.PropertyType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,8 +33,8 @@ public class PropertyService {
     private UserRepository userRepository;
     private PropertyFavoritesRepository favoritesRepository;
 
-    public PropertyDto createProperty(Integer userId, String title, BigDecimal price, String description) {
-        PropertyEntity propertyEntity = new PropertyEntity(null, title, userId, price, description, LocalDateTime.now());
+    public PropertyDto createProperty(Integer userId, String title, BigDecimal price, String description, String location, PropertyType type) {
+        PropertyEntity propertyEntity = new PropertyEntity(null, title, userId, price, description, LocalDateTime.now(), location, type.name());
         propertyEntity = propertyRepository.save(propertyEntity);
         PropertyDto propertyDto = propertyDtoMapper.mapToPropertyDto(propertyEntity);
         return propertyDto;
